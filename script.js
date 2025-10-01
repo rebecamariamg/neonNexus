@@ -5,34 +5,28 @@ class Personagem {
     this.imagem = imagem;
     this.pontos = 0;
   }
-  adicionarPontos(valor) {
-    this.pontos += valor;
-  }
-  resetar() {
-    this.pontos = 0;
-  }
 }
 
 const personagens = {
   kai: new Personagem(
     "Kai, o Hacker Visionário",
     "Um estrategista brilhante, apaixonado por tecnologia e conhecimento.",
-    "https://via.placeholder.com/200x200.png?text=Kai"
+    "personagens/Kai BK.png"
   ),
   rhea: new Personagem(
     "Rhea, a Agente das Sombras",
     "Misteriosa, furtiva e paciente, prefere agir sem ser notada.",
-    "https://via.placeholder.com/200x200.png?text=Rhea"
+    "personagens/Rhea BK.png"
   ),
   jax: new Personagem(
     "Jax, o Guerreiro Digital",
     "Corajoso e direto, protege os inocentes com bravura.",
-    "https://via.placeholder.com/200x200.png?text=Jax"
+    "personagens/Jax BK.png"
   )
 };
 
 const perguntas = [
-  {
+    {
     texto: "Qual seria sua prioridade numa missão?",
     opcoes: [
       { texto: "Infiltrar e coletar dados sem ser notado", pontos: { kai: 1, rhea: 3, jax: 2 } },
@@ -115,6 +109,7 @@ const perguntas = [
 ];
 
 let perguntaAtual = 0;
+let respostasUsuario = []; 
 
 const inicio = document.getElementById("inicio");
 const quiz = document.getElementById("quiz");
@@ -122,33 +117,67 @@ const resultado = document.getElementById("resultado");
 const perguntaEl = document.getElementById("pergunta");
 const opcoesEl = document.getElementById("opcoes");
 const btnNext = document.getElementById("btnNext");
+const btnBack = document.getElementById("btnBack");
+const modal = document.getElementById("modalPersonagens");
 
 function mostrarPergunta() {
   let p = perguntas[perguntaAtual];
   perguntaEl.textContent = p.texto;
   opcoesEl.innerHTML = "";
-  p.opcoes.forEach(opcao => {
+
+  p.opcoes.forEach((opcao, index) => {
     let btn = document.createElement("button");
     btn.textContent = opcao.texto;
-    btn.onclick = () => selecionarResposta(opcao.pontos);
+    btn.onclick = () => selecionarResposta(index, opcao.pontos);
+    
+    if (respostasUsuario[perguntaAtual] !== undefined && respostasUsuario[perguntaAtual].index === index) {
+        btn.classList.add("selected");
+    }
+    
     opcoesEl.appendChild(btn);
   });
+  
+
+  btnBack.classList.toggle("hidden", perguntaAtual === 0);
+  btnNext.classList.toggle("hidden", respostasUsuario[perguntaAtual] === undefined);
 }
 
-function selecionarResposta(pontos) {
-  for (let key in pontos) {
-    personagens[key].adicionarPontos(pontos[key]);
-  }
+function selecionarResposta(index, pontos) {
+  respostasUsuario[perguntaAtual] = { index, pontos };
+  
+
+  const botoes = opcoesEl.querySelectorAll('button');
+  botoes.forEach(btn => btn.classList.remove('selected'));
+  botoes[index].classList.add('selected');
+
   btnNext.classList.remove("hidden");
+}
+
+function calcularPontuacao() {
+    for (let key in personagens) {
+        personagens[key].pontos = 0;
+    }
+    respostasUsuario.forEach(resposta => {
+        for (let key in resposta.pontos) {
+            personagens[key].pontos += resposta.pontos[key];
+        }
+    });
 }
 
 btnNext.onclick = () => {
   perguntaAtual++;
   if (perguntaAtual < perguntas.length) {
     mostrarPergunta();
-    btnNext.classList.add("hidden");
   } else {
+    calcularPontuacao();
     mostrarResultado();
+  }
+};
+
+btnBack.onclick = () => {
+  if (perguntaAtual > 0) {
+    perguntaAtual--;
+    mostrarPergunta();
   }
 };
 
@@ -165,17 +194,36 @@ function mostrarResultado() {
   document.getElementById("personagemImg").src = vencedor.imagem;
   document.getElementById("explicacao").textContent =
     `Você acumulou ${vencedor.pontos} pontos!`;
+}
 
-  document.getElementById("btnRestart").onclick = () => {
+function recomecar() {
     perguntaAtual = 0;
-    for (let key in personagens) personagens[key].resetar();
+    respostasUsuario = [];
+    for (let key in personagens) {
+        personagens[key].pontos = 0;
+    }
     resultado.classList.add("hidden");
     inicio.classList.remove("hidden");
-  };
 }
 
 document.getElementById("btnStart").onclick = () => {
   inicio.classList.add("hidden");
   quiz.classList.remove("hidden");
   mostrarPergunta();
+};
+
+document.getElementById("btnRestart").onclick = recomecar;
+
+document.getElementById("btnConhecer").onclick = () => {
+    modal.classList.remove("hidden");
+};
+
+document.querySelector(".close-button").onclick = () => {
+    modal.classList.add("hidden");
+};
+
+window.onclick = (event) => {
+  if (event.target == modal) {
+    modal.classList.add("hidden");
+  }
 };

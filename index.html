@@ -11,12 +11,29 @@
       <h1>Bem-vindo ao Neon Nexus</h1>
       <p>Um universo futurista repleto de conspirações digitais. Descubra qual personagem você seria!</p>
       <button id="btnStart">Começar Jogo</button>
+      <button id="btnConhecer">Conheça os Personagens</button>
     </section>
 
     <section id="quiz" class="tela hidden">
-      <h2 id="pergunta"></h2>
-      <div id="opcoes"></div>
-      <button id="btnNext" class="hidden">Próxima</button>
+      <div class="personagens-background">
+        <img src="personagens/Kai.png" class="personagem-bg-img" style="left: 10%; top: 15%;">
+        <img src="personagens/Rhea.png" class="personagem-bg-img" style="right: 10%; top: 15%;">
+  
+        <img src="personagens/Rhea 2.png" class="personagem-bg-img" style="left: 5%; top: 50%;">
+        <img src="personagens/Kai 2.png" class="personagem-bg-img" style="right: 5%; top: 50%;">
+
+        <img src="personagens/Jax.png" class="personagem-bg-img" style="left: 20%; top: 75%;">
+        <img src="personagens/Jax 2.png" class="personagem-bg-img" style="right: 20%; top: 75%;">
+      </div>
+          <h1 class="quiz-title">Neon Nexus Quiz</h1>
+      <div class="quiz-container">
+        <h2 id="pergunta"></h2>
+        <div id="opcoes"></div>
+      </div>
+      <div class="botoes-navegacao">
+        <button id="btnBack" class="hidden">Voltar</button>
+        <button id="btnNext" class="hidden">Próxima</button>
+      </div>
     </section>
 
     <section id="resultado" class="tela hidden">
@@ -27,6 +44,30 @@
       <p id="explicacao"></p>
       <button id="btnRestart">Recomeçar</button>
     </section>
+  </div>
+
+  <div id="modalPersonagens" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Personagens de Neon Nexus</h2>
+      <div class="personagens-container">
+        <div class="personagem-card">
+          <img src="personagens/Kai BK.png" alt="Kai">
+          <h3>Kai, o Hacker Visionário</h3>
+          <p>Um gênio da programação que consegue manipular sistemas e dados em alta velocidade. É um líder nato, sempre à frente das tendências tecnológicas.</p>
+        </div>
+        <div class="personagem-card">
+          <img src="personagens/Rhea BK.png" alt="Rhea">
+          <h3>Rhea, a Agente das Sombras</h3>
+          <p>Especialista em infiltração e furtividade, usa habilidades para se mover silenciosamente pelas mega-cidades e coletar informações secretas.</p>
+        </div>
+        <div class="personagem-card">
+          <img src="personagens/Jax BK.png" alt="Jax">
+          <h3>Jax, o Guerreiro Digital</h3>
+          <p>Mestre em combate com implantes e armas de alta tecnologia, protege os inocentes e combate ameaças nas ruas e na rede.</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
